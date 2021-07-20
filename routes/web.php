@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\PublicUserLinksPageController;
+use App\Models\Link;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +22,13 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth'])
+    ->name('dashboard');
+
+Route::get("/count/{link}", [PublicUserLinksPageController::class, "countLinkVisit"])
+    ->name("count.link.visits");
 
 require __DIR__.'/auth.php';
+
+Route::get("/{nick}", [PublicUserLinksPageController::class, "showUserPublicLinks"])
+    ->name("show.public.links");
