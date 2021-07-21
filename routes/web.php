@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PublicUserLinksPageController;
 use App\Models\Link;
 use App\Models\User;
@@ -21,15 +22,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    $user = Auth::user();
-    return view('dashboard')
-        ->with([
-            "user" => $user,
-            "links" => $user->links()->get()
-        ]);
-})->middleware(['auth'])
-    ->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, "index"])
+    ->middleware(['auth'])
+    ->name("dashboard.index");
+
+Route::post("/dashboard", [DashboardController::class, "create"])
+    ->middleware(["auth"])
+    ->name("dashboard.create");
 
 /*
  *
@@ -37,21 +36,17 @@ Route::get('/dashboard', function () {
  *
  */
 
-Route::post("/dashboard", [DashboardController::class, "create"])
-    ->middleware(["auth"])
-    ->name("link.create");
-
 Route::delete("/links/{link}/", [DashboardController::class, "delete"])
     ->middleware(["auth"])
-    ->name("link.delete");
+    ->name("dashboard.delete");
 
 Route::get("/links/{link}/", [DashboardController::class, "details"])
     ->middleware(["auth"])
-    ->name("link.details");
+    ->name("dashboard.details");
 
 Route::get("/links/{link}/edit/", [DashboardController::class, "edit"])
     ->middleware(["auth"])
-    ->name("link.edit");
+    ->name("dashboard.edit");
 
 /*
  *

@@ -31,7 +31,7 @@
                     <br>
 
                     <div>
-                        <form method="POST" action="{{ route("link.create") }}">
+                        <form method="POST" action="{{ route("dashboard.create") }}">
                             @csrf
                             <div class="card mb-3 bg-dark border-sublime nl-add-new-link">
                                 <div class="card-body">
@@ -56,11 +56,11 @@
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold">{{ $link->title }}</h5>
                                     <p class="card-text text-black-50">{{ $link->url }}</p>
-                                    <form action="{{ route("link.delete", $link) }}" method="POST">
+                                    <form action="{{ route("dashboard.delete", $link) }}" method="POST">
                                         @csrf
                                         @method("DELETE")
-                                        <a href="{{ route("link.details", $link) }}" class="btn btn-link"><i class="bi bi-zoom-in"></i></a>
-                                        <a href="{{ route("link.edit", $link) }}" class="btn btn-link"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="{{ route("dashboard.details", $link) }}" class="btn btn-link"><i class="bi bi-zoom-in"></i></a>
+                                        <a href="{{ route("dashboard.edit", $link) }}" class="btn btn-link"><i class="bi bi-pencil-square"></i></a>
                                         <button type="submit" class="btn btn-link"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </div>
