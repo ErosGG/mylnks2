@@ -11,9 +11,7 @@ class PublicUserLinksPageController extends Controller
     public function showUserPublicLinks($nick)
     {
         $user = User::firstWhere("nick", "=", $nick);
-        if (! $user) {
-            abort(404);
-        }
+        if (! $user) abort(404);
         $links = $user->links()->get();
         return view("public-user-links")
             ->with("links", $links);

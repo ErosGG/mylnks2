@@ -3,6 +3,7 @@
 use App\Http\Controllers\PublicUserLinksPageController;
 use App\Models\Link;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,9 +22,42 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = Auth::user();
+    return view('dashboard')
+        ->with([
+            "user" => $user,
+            "links" => $user->links()->get()
+        ]);
 })->middleware(['auth'])
     ->name('dashboard');
+
+/*
+ *
+ * BLOC PROVISIONAL
+ *
+ */
+
+Route::post("/dashboard", [DashboardController::class, "create"])
+    ->middleware(["auth"])
+    ->name("link.create");
+
+Route::delete("/links/{link}/", [DashboardController::class, "delete"])
+    ->middleware(["auth"])
+    ->name("link.delete");
+
+Route::get("/links/{link}/", [DashboardController::class, "details"])
+    ->middleware(["auth"])
+    ->name("link.details");
+
+Route::get("/links/{link}/edit/", [DashboardController::class, "edit"])
+    ->middleware(["auth"])
+    ->name("link.edit");
+
+/*
+ *
+ * FI BLOC PROVISIONAL
+ *
+ */
 
 Route::get("/count/{link}", [PublicUserLinksPageController::class, "countLinkVisit"])
     ->name("count.link.visits");
