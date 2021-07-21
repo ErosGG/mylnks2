@@ -21,7 +21,6 @@ class DashboardController extends Controller
     public function create(Request $request)
     {
         $user = Auth::user();
-
         $data = $request->validate([
                 "title" => ["required", "string", "max:255"],
                 "url" => ["required", "url"],
@@ -32,15 +31,12 @@ class DashboardController extends Controller
                 "url.required" => "El camp URL és obligatori",
                 "url.url" => "El camp URL ha de ser una URL vàlida",
         ]);
-
         $data["url"] = strtolower($data["url"]);
-
         Link::create([
             "user_id" => $user->id,
             "title" => $data["title"],
             "url" => $data["url"],
         ]);
-
         return view("dashboard")
             ->with([
                 "user" => $user,
