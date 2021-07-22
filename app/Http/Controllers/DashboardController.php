@@ -22,12 +22,12 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $data = $request->validate([
-                "title" => ["required", "string", "max:255"],
+                "title" => ["required", "string", "max:50"],
                 "url" => ["required", "url"],
             ], [
                 "title.required" => "El camp títol és obligatori",
                 "title.string" => "El camp títol només admet cadenes de text",
-                "title.max" => "El camp títol pot contenir un màxim de 255 caràcters",
+                "title.max" => "El camp títol pot contenir un màxim de 50 caràcters",
                 "url.required" => "El camp URL és obligatori",
                 "url.url" => "El camp URL ha de ser una URL vàlida",
         ]);
