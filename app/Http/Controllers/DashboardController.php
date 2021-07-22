@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class DashboardController extends Controller
 {
@@ -42,5 +43,28 @@ class DashboardController extends Controller
                 "user" => $user,
                 "links" => $user->links()->get(),
             ]);
+    }
+
+    public function editor(Link $link)
+    {
+        if (Gate::denies("access-link-editor", $link)) {
+            $user = Auth::user();
+            return redirect()
+                ->route("dashboard.index")
+                ->with([
+                    "user" => $user,
+                    "links" => $user->links()->get(),
+                ]);
+        }
+        return view("edit-link")->with("link", $link);
+    }
+
+    public function update(Request $request, Link $link)
+    {
+        if (Auth::user()->can("update", $link)) {
+            dd("Controlador: SÍ pot actualitzar el post");
+        } else {
+            dd("Controlador: NO pot actualitzar el post");
+        }
     }
 }

@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Link;
+use App\Models\User;
+use App\Policies\LinkPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Link::class => LinkPolicy::class,
     ];
 
     /**
@@ -25,6 +30,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define("access-link-editor", function (User $user, Link $link) {
+            return $user->id === $link->user_id;
+        });
     }
 }

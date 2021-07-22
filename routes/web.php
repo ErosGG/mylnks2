@@ -44,9 +44,13 @@ Route::get("/links/{link}/", [DashboardController::class, "details"])
     ->middleware(["auth"])
     ->name("dashboard.details");
 
-Route::get("/links/{link}/edit/", [DashboardController::class, "edit"])
+Route::get("/links/{link}/edit/", [DashboardController::class, "editor"])
     ->middleware(["auth"])
     ->name("dashboard.edit");
+
+Route::put("/links/{link}/edit/", [DashboardController::class, "update"])
+    ->middleware(["auth"])
+    ->name("dashboard.update");
 
 /*
  *
