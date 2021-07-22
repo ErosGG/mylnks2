@@ -13,7 +13,7 @@ class CreateLinkTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_only_authenticated_users_can_create_a_link()
+    public function test_guest_users_cannot_create_a_link()
     {
         $this->post("/dashboard", [
             "title" => "Prova",
@@ -25,13 +25,13 @@ class CreateLinkTest extends TestCase
         ]);
     }
 
-    public function test_user_can_create_a_link_providing_valid_data()
+    public function test_authenticated_user_can_create_a_link_providing_valid_data()
     {
         $user = User::factory()->create();
         $this->actingAs($user)->post("/dashboard", [
             "title" => "Prova",
             "url" => "https://www.prova.cat/",
-        ]);
+        ])->assertSessionHasNoErrors();
         $this->assertDatabaseHas("links", [
             "title" => "Prova",
             "url" => "https://www.prova.cat/",
@@ -43,7 +43,11 @@ class CreateLinkTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user)->post("/dashboard", [
             "url" => "https://www.prova.cat/",
+        ])->assertSessionHasErrors([
+            "title" => "El camp títol és obligatori"
         ]);
+        $this->actingAs($user)->get("/dashboard")
+            ->assertSeeText("El camp títol és obligatori");
         $this->assertDatabaseMissing("links", [
             "url" => "https://www.prova.cat/",
         ]);
@@ -54,7 +58,11 @@ class CreateLinkTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user)->post("/dashboard", [
             "title" => "Prova",
+        ])->assertSessionHasErrors([
+            "url" => "El camp URL és obligatori"
         ]);
+        $this->actingAs($user)->get("/dashboard")
+            ->assertSeeText("El camp URL és obligatori");
         $this->assertDatabaseMissing("links", [
             "title" => "Prova",
         ]);
