@@ -22,6 +22,19 @@ class LinkEditorTest extends TestCase
             ->assertStatus(200);
     }
 
+    public function test_link_editor_form_shows_the_link_data()
+    {
+        $user = User::factory()->create();
+        $link = Link::factory()->create([
+            "user_id" => $user->id,
+        ]);
+        $this->actingAs($user)->get("/links/$link->id/edit/")
+            ->assertSee([
+                $link->title,
+                $link->url,
+            ]);
+    }
+
     public function test_authenticated_users_who_do_not_own_the_link_are_redirected_to_the_dashboard()
     {
         $userA = User::factory()->create();
@@ -41,5 +54,12 @@ class LinkEditorTest extends TestCase
         ]);
         $this->get("/links/$link->id/edit/")
             ->assertRedirect("/login");
+    }
+
+    public function test_shows_404_error_if_requested_link_does_not_exist()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user)->get("links/300/edit")
+            ->assertStatus(404);
     }
 }
