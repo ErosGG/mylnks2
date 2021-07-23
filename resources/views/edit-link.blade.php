@@ -21,7 +21,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route("dashboard.update", $link) }}"> <!-- NO TÉ ACTION! Hauria de ser route("link.update") -->
+                    <form method="POST" action="{{ route("dashboard.update", $link) }}">
                         @csrf
                         @method("PUT")
                         <div class="card mt-5 bg-sublime border-sublime nl-add-new-link">

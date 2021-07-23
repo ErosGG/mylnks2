@@ -60,7 +60,7 @@
                                         @csrf
                                         @method("DELETE")
                                         <a href="{{ route("dashboard.details", $link) }}" class="btn btn-link"><i class="bi bi-zoom-in"></i></a>
-                                        <a href="{{ route("dashboard.edit", $link) }}" class="btn btn-link"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="{{ route("dashboard.editor", $link) }}" class="btn btn-link"><i class="bi bi-pencil-square"></i></a>
                                         <button type="submit" class="btn btn-link"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </div>

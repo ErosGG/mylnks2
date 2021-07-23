@@ -30,6 +30,10 @@ Route::post("/dashboard", [DashboardController::class, "create"])
     ->middleware(["auth"])
     ->name("dashboard.create");
 
+Route::get("/links/{link}/edit/", [DashboardController::class, "editor"])
+    ->middleware(["auth"])
+    ->name("dashboard.editor");
+
 /*
  *
  * BLOC PROVISIONAL
@@ -43,10 +47,6 @@ Route::delete("/links/{link}/", [DashboardController::class, "delete"])
 Route::get("/links/{link}/", [DashboardController::class, "details"])
     ->middleware(["auth"])
     ->name("dashboard.details");
-
-Route::get("/links/{link}/edit/", [DashboardController::class, "editor"])
-    ->middleware(["auth"])
-    ->name("dashboard.edit");
 
 Route::put("/links/{link}/edit/", [DashboardController::class, "update"])
     ->middleware(["auth"])

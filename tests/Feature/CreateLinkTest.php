@@ -185,4 +185,33 @@ class CreateLinkTest extends TestCase
             ->get("/dashboard")
             ->assertSeeText("El camp URL ha de ser una URL vàlida");
     }
+
+    public function test_user_cannot_create_a_link_providing_a_non_unique_url()
+    {
+        $user = User::factory()->create();
+        $link = Link::factory()->create();
+        $this->actingAs($user)->post("/dashboard", [
+            "title" => "Prova",
+            "url" => $link->url,
+        ])->assertSessionHasErrors([
+            "url" => "La URL introduïda ja existeix",
+        ]);
+        $this->assertDatabaseMissing("links", [
+            "title" => "Prova",
+            "url" => $link->url,
+        ]);
+    }
+
+    public function test_shows_an_error_message_if_a_non_unique_url_is_provided()
+    {
+        $user = User::factory()->create();
+        $link = Link::factory()->create();
+        $this->actingAs($user)->post("/dashboard", [
+            "title" => "Prova",
+            "url" => $link->url,
+        ]);
+        $this->actingAs($user)
+            ->get("/dashboard")
+            ->assertSeeText("La URL introduïda ja existeix");
+    }
 }
