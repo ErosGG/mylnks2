@@ -90,7 +90,7 @@ class CreateLinkTest extends TestCase
             "title" => "El camp títol pot contenir un màxim de 50 caràcters",
         ]);
         $this->assertDatabaseMissing("links", [
-            "title" => "Lorem ipsum dolor sit amet, consectetuer adipiscin",
+            "title" => "Lorem ipsum dolor sit amet, consectetuer adipiscing",
             "url" => "https://www.prova.cat/",
         ]);
     }
@@ -121,10 +121,9 @@ class CreateLinkTest extends TestCase
         ]);
     }
 
-    // No aconsegueixo que el següent test funcioni correctament
-    /*
     public function test_shows_an_error_message_if_title_is_not_string_data_type()
     {
+        $this->markTestSkipped("REVISAR: No aconsegueixo que el test funcioni correctament");
         $user = User::factory()->create();
         $this->actingAs($user)->post("/dashboard", [
             "title" => ["array com a tipus de dades"],
@@ -133,7 +132,6 @@ class CreateLinkTest extends TestCase
         $this->actingAs($user)->get("/dashboard")
             ->assertSeeText("El camp títol només admet cadenes de text");
     }
-    */
 
     public function test_user_cannot_create_a_link_without_providing_an_url()
     {
