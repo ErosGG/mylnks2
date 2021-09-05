@@ -145,6 +145,7 @@ class UpdateLinkTest extends TestCase
         ]);
     }
 
+    // AQUEST NO FUNCIONA CORRECTAMENT /////////////////////////////////////////////////////////////////////////////////
     public function test_shows_an_error_message_if_title_is_not_string_data_type()
     {
         $this->markTestSkipped("REVISAR: No aconsegueixo que el test funcioni correctament");
@@ -183,5 +184,69 @@ class UpdateLinkTest extends TestCase
         $this->actingAs($user)
             ->get("/dashboard")
             ->assertSeeText("El camp URL és obligatori");
+    }
+
+    /** @test */
+    public function user_cannot_update_a_link_providing_an_invalid_url()
+    {
+        $user = User::factory()->create();
+        $link = Link::factory()->create();
+        $this->actingAs($user)->put("/links/$link->id/edit/", [
+            "url" => "url-incorrecta",
+        ])->assertSessionHasErrors([
+            "url" => "El camp URL ha de ser una URL vàlida",
+        ]);
+        $this->assertDatabaseMissing("links", [
+            "url" => "url-incorrecta",
+        ])->assertDatabaseHas("links", [
+            "url" => $link->url,
+        ]);
+    }
+
+    /** @test */
+    public function shows_an_error_message_if_an_invalid_url_is_provided()
+    {
+        $user = User::factory()->create();
+        $link = Link::factory()->create();
+        $this->actingAs($user)->put("/links/$link->id/edit/", [
+            "url" => "url-incorrecta",
+        ]);
+        $this->actingAs($user)
+            ->get("/dashboard")
+            ->assertSeeText("El camp URL ha de ser una URL vàlida");
+    }
+
+    /** @test */
+    public function user_cannot_update_a_link_providing_an_non_unique_url()
+    {
+        $user = User::factory()->create();
+        $linkA = Link::factory()->create();
+        $linkB = Link::factory()->create();
+        $this->actingAs($user)->put("/links/$linkA->id/edit/", [
+            "url" => $linkB->url,
+        ])->assertSessionHasErrors([
+            "url" => "La URL introduïda ja existeix",
+        ]);
+        $this->assertDatabaseMissing("links", [
+            "title" => $linkA->title,
+            "url" => $linkB->url,
+        ])->assertDatabaseHas("links", [
+            "title" => $linkA->title,
+            "url" => $linkA->url,
+        ]);
+    }
+
+    /** @test */
+    public function shows_an_error_message_if_a_non_unique_url_is_provided()
+    {
+        $user = User::factory()->create();
+        $linkA = Link::factory()->create();
+        $linkB = Link::factory()->create();
+        $this->actingAs($user)->put("/links/$linkA->id/edit/", [
+            "url" => $linkB->url,
+        ]);
+        $this->actingAs($user)
+            ->get("/dashboard")
+            ->assertSeeText("La URL introduïda ja existeix");
     }
 }

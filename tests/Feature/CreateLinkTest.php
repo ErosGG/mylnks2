@@ -121,6 +121,7 @@ class CreateLinkTest extends TestCase
         ]);
     }
 
+    // AQUEST NO FUNCIONA CORRECTAMENT /////////////////////////////////////////////////////////////////////////////////
     public function test_shows_an_error_message_if_title_is_not_string_data_type()
     {
         $this->markTestSkipped("REVISAR: No aconsegueixo que el test funcioni correctament");

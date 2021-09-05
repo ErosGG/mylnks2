@@ -33,5 +33,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define("access-link-editor", function (User $user, Link $link) {
             return $user->id === $link->user_id;
         });
+
+        Gate::define("access-link-details", function (User $user, Link $link) {
+           return $user->id === $link->user_id;
+        });
     }
 }

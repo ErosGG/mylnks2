@@ -37,7 +37,7 @@ class DashboardController extends Controller
                 "title.max" => "El camp títol pot contenir un màxim de 50 caràcters",
                 "url.required" => "El camp URL és obligatori",
                 "url.url" => "El camp URL ha de ser una URL vàlida",
-            "url.unique" => "La URL introduïda ja existeix",
+                "url.unique" => "La URL introduïda ja existeix",
             ]);
         $data["url"] = strtolower($data["url"]);
         Link::create([
@@ -54,8 +54,15 @@ class DashboardController extends Controller
 
     public function details(Link $link)
     {
+        if (Gate::denies("access-link-details", $link)) {
+            //return redirect()->route("dashboard.index");
+            return redirect("/dashboard", 301);
+        }
+        return view("link-details")->with("link", $link);
+        /*
         return view("link-details")
             ->with("link", $link);
+        */
     }
 
     public function editor(Link $link)
