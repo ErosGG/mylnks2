@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use function Composer\Autoload\includeFile;
 
 class DashboardController extends Controller
 {
@@ -16,7 +17,19 @@ class DashboardController extends Controller
         return view('dashboard')
             ->with([
                 "user" => $user,
-                "links" => $user->links()->get()
+                "links" => $user->links()->get(),
+                "paperera" => false,
+            ]);
+    }
+
+    public function bin()
+    {
+        $user = Auth::user();
+        return view("dashboard")
+            ->with([
+                "user" => $user,
+                "links" => $user->links()->onlyTrashed()->get(),
+                "paperera" => true,
             ]);
     }
 
@@ -49,16 +62,23 @@ class DashboardController extends Controller
             ->with([
                 "user" => $user,
                 "links" => $user->links()->get(),
+                "paperera" => false,
             ]);
     }
 
     public function details(Link $link)
     {
+        if (Auth::user()->can("view", $link)) {
+            return view("link-details")->with("link", $link);
+        }
+        return redirect("/dashboard", 301);
+        /*
         if (Gate::denies("access-link-details", $link)) {
             //return redirect()->route("dashboard.index");
             return redirect("/dashboard", 301);
         }
         return view("link-details")->with("link", $link);
+        */
         /*
         return view("link-details")
             ->with("link", $link);
@@ -96,8 +116,61 @@ class DashboardController extends Controller
             ]);
             $data["url"] = strtolower($data["url"]);
             $link->update($data);
-            return redirect()->route("dashboard.details", ["link" => $link]);
+            return redirect()->route("dashboard.details", [
+                "link" => $link
+            ]);
         }
         return redirect()->route("dashboard.index");
+    }
+
+    public function delete($id)
+    {
+        /*
+        if (Gate::denies("delete-a-link", $link)) {
+            return redirect("/dashboard", 301);
+        }
+        $link->delete();
+        return redirect()->route("dashboard.index");
+        */
+        $link = Link::withTrashed()->where("id", $id)->firstOrFail();
+        if (! $link->trashed() && Auth::user()->can("delete", $link)) {
+            $link->delete();
+            return redirect()->route("dashboard.index");
+        }
+        return redirect("/dashboard", 301);
+    }
+
+    public function restore($id)
+    {
+        $link = Link::withTrashed()->where("id", $id)->firstOrFail();
+        /*
+        if (Gate::denies("restore-a-link", $link)) {
+            return redirect("/dashboard", 301);
+        }
+        $link->restore();
+        return redirect()->route("dashboard.bin");
+        */
+        if ($link->trashed() && Auth::user()->can("restore", $link)) {
+            $link->restore();
+            return redirect()->route("dashboard.bin");
+        }
+        return redirect("/dashboard", 301);
+    }
+
+    public function destroy($id)
+    {
+        $link = Link::withTrashed()->where("id", $id)->firstOrFail();
+        /*
+        if (Gate::denies("destroy-a-link", $link)) {
+            return redirect("/dashboard", 301);
+        }
+        $link->forceDelete();
+        return redirect()->route("dashboard.bin");
+        */
+        if ($link->trashed() && Auth::user()->can("forceDelete", $link)) {
+            $link->forceDelete();
+            return redirect()->route("dashboard.bin");
+        }
+        return redirect("/dashboard", 301);
     }
 }

@@ -16,7 +16,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->put("/links/$link->id/edit/", [
+        $this->put("/links/$link->id/edit", [
             "title" => "Prova",
             "url" => "https://www.prova.cat/"
         ]);
@@ -33,7 +33,7 @@ class UpdateLinkTest extends TestCase
         $link = Link::factory()->create([
             "user_id" => $userA->id,
         ]);
-        $this->actingAs($userB)->put("/links/$link->id/edit/", [
+        $this->actingAs($userB)->put("/links/$link->id/edit", [
             "title" => "Prova",
             "url" => "https://www.prova.cat/"
         ]);
@@ -47,7 +47,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => "Prova",
             "url" => "https://www.prova.cat/"
         ])->assertSessionHasNoErrors();
@@ -61,11 +61,11 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => "Prova",
             "url" => "https://www.prova.cat/"
         ]);
-        $this->actingAs($user)->get("/links/$link->id/edit/")
+        $this->actingAs($user)->get("/links/$link->id/edit")
             ->assertDontSeeText([
                 "El camp títol és obligatori",
                 "El camp títol només admet cadenes de text",
@@ -79,7 +79,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "url" => "https://www.prova.cat/",
         ])->assertSessionHasErrors([
             "title" => "El camp títol és obligatori",
@@ -93,7 +93,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "url" => "https://www.prova.cat/",
         ]);
         $this->actingAs($user)
@@ -105,7 +105,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => "Lorem ipsum dolor sit amet, consectetuer adipiscing",
             "url" => "https://www.prova.cat/",
         ])->assertSessionHasErrors([
@@ -121,12 +121,12 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => "Lorem ipsum dolor sit amet, consectetuer adipiscing",
             "url" => "https://www.prova.cat/",
         ]);
         $this->actingAs($user)
-            ->get("/links/$link->id/edit/")
+            ->get("/links/$link->id/edit")
             ->assertSeeText("El camp títol pot contenir un màxim de 50 caràcters");
     }
 
@@ -134,7 +134,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => ["array com a tipus de dades"],
             "url" => "https://www.prova.cat/",
         ])->assertSessionHasErrors([
@@ -151,12 +151,12 @@ class UpdateLinkTest extends TestCase
         $this->markTestSkipped("REVISAR: No aconsegueixo que el test funcioni correctament");
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => ["array com a tipus de dades"],
             "url" => "https://www.prova.cat/",
         ]);
         $this->actingAs($user)
-            ->get("/links/$link->id/edit/")
+            ->get("/links/$link->id/edit")
             ->assertSeeText("El camp títol només admet cadenes de text");
     }
 
@@ -164,7 +164,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => "Prova",
         ])->assertSessionHasErrors([
             "url" => "El camp URL és obligatori",
@@ -178,7 +178,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "title" => "Prova",
         ]);
         $this->actingAs($user)
@@ -191,7 +191,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "url" => "url-incorrecta",
         ])->assertSessionHasErrors([
             "url" => "El camp URL ha de ser una URL vàlida",
@@ -208,7 +208,7 @@ class UpdateLinkTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$link->id/edit/", [
+        $this->actingAs($user)->put("/links/$link->id/edit", [
             "url" => "url-incorrecta",
         ]);
         $this->actingAs($user)
@@ -222,7 +222,7 @@ class UpdateLinkTest extends TestCase
         $user = User::factory()->create();
         $linkA = Link::factory()->create();
         $linkB = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$linkA->id/edit/", [
+        $this->actingAs($user)->put("/links/$linkA->id/edit", [
             "url" => $linkB->url,
         ])->assertSessionHasErrors([
             "url" => "La URL introduïda ja existeix",
@@ -242,7 +242,7 @@ class UpdateLinkTest extends TestCase
         $user = User::factory()->create();
         $linkA = Link::factory()->create();
         $linkB = Link::factory()->create();
-        $this->actingAs($user)->put("/links/$linkA->id/edit/", [
+        $this->actingAs($user)->put("/links/$linkA->id/edit", [
             "url" => $linkB->url,
         ]);
         $this->actingAs($user)

@@ -37,5 +37,18 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define("access-link-details", function (User $user, Link $link) {
            return $user->id === $link->user_id;
         });
+
+        Gate::define("delete-a-link", function (User $user, Link $link) {
+            return $user->id === $link->user_id;
+        });
+
+        Gate::define("restore-a-link", function (User $user, Link $link)
+        {
+           return $user->id === $link->user_id;
+        });
+
+        Gate::define("destroy-a-link", function (User $user, Link $link) {
+            return $user->id === $link->user_id;
+        });
     }
 }

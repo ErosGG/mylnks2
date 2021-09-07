@@ -17,7 +17,7 @@ class LinkDetailsTest extends TestCase
     {
         User::factory()->create();
         $link = Link::factory()->create();
-        $this->get("/links/$link->id/")
+        $this->get("/links/$link->id")
             ->assertStatus(302)
             ->assertRedirect("/login");
     }
@@ -30,7 +30,7 @@ class LinkDetailsTest extends TestCase
         $link = Link::factory()->create([
             "user_id" => $userA->id,
         ]);
-        $this->actingAs($userB)->get("/links/$link->id/")
+        $this->actingAs($userB)->get("/links/$link->id")
             ->assertStatus(301)
             ->assertRedirect("/dashboard");
     }
@@ -40,7 +40,7 @@ class LinkDetailsTest extends TestCase
     {
         $user = User::factory()->create();
         $link = Link::factory()->create();
-        $this->actingAs($user)->get("/links/$link->id/")
+        $this->actingAs($user)->get("/links/$link->id")
             ->assertOk()  // assertStatus(200)
             ->assertSee([
                 $link->title,
@@ -48,6 +48,7 @@ class LinkDetailsTest extends TestCase
                 $link->views, // Com assegurar-se que sigui del nombre de visites i no de qualsevol altra cosa?
             ]);
     }
+
     /** @test */
     public function shows_404_error_if_requested_link_does_not_exist()
     {

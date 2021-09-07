@@ -30,7 +30,7 @@ class LinkPolicy
      */
     public function view(User $user, Link $link)
     {
-        //
+        return $user->id === $link->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class LinkPolicy
      */
     public function delete(User $user, Link $link)
     {
-        //
+        return $user->id === $link->user_id;
     }
 
     /**
@@ -77,7 +77,7 @@ class LinkPolicy
      */
     public function restore(User $user, Link $link)
     {
-        //
+        return $user->id === $link->user_id;
     }
 
     /**
@@ -89,6 +89,6 @@ class LinkPolicy
      */
     public function forceDelete(User $user, Link $link)
     {
-        //
+        return $user->id === $link->user_id;
     }
 }
