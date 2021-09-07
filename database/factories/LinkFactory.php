@@ -26,6 +26,8 @@ class LinkFactory extends Factory
             "user_id" => User::inRandomOrder()->first(),
             "title" => $this->faker->company(),
             "url" => $this->faker->url(),
+            "status" => $this->faker->randomElement(["draft", "published", "restricted"]),
+            "published_at" => $this->faker->dateTimeBetween("-5 years", "+1 year"),
         ];
     }
 }

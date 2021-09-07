@@ -18,6 +18,8 @@ class LinkSeeder extends Seeder
             "title" => "NASA",
             "url" => "https://www.nasa.gov/",
             "user_id" => "1",
+            "status" => "published",
+            "published_at" => now(),
         ]);
 
         link::factory()

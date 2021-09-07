@@ -16,6 +16,7 @@ class Link extends Model
         "user_id",
         "url",
         "title",
+        "status",
         "published_at",
     ];
 

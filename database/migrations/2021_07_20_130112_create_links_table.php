@@ -22,6 +22,7 @@ class CreateLinksTable extends Migration
                 ->onDelete("cascade");
             $table->string("title");
             $table->string("url");
+            $table->enum("status", ["draft", "published", "restricted"])->default("published");
             $table->bigInteger("views")->default(0);
             $table->timestamps();
             $table->timestamp("published_at")->nullable();
