@@ -16,6 +16,11 @@ class Link extends Model
         "user_id",
         "url",
         "title",
+        "published_at",
+    ];
+
+    protected $nullable = [
+        "published_at",
     ];
 
     public function user(): BelongsTo

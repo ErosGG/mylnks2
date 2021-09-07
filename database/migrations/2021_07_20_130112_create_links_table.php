@@ -24,6 +24,7 @@ class CreateLinksTable extends Migration
             $table->string("url");
             $table->bigInteger("views")->default(0);
             $table->timestamps();
+            $table->timestamp("published_at")->nullable();
             $table->softDeletes();
         });
     }
